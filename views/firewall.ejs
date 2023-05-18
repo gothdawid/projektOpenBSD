@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ustawienia Firewalla</title>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+    <%- include('navbar.ejs') %>
+
+    <div class="container mt-4">
+    <h1>Ustawienia Firewalla</h1>
+    <form action="/firewall" method="POST">
+        <div class="form-group">
+        <label for="enable">Włącz firewall:</label>
+        <input type="checkbox" id="enable" name="enable" <% if (firewallEnabled) { %>checked<% } %>>
+        </div>
+        <div class="form-group">
+        <label for="rules">Reguły firewalla:</label>
+        <textarea id="rules" name="rules" class="form-control"><%= firewallRules %></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Zapisz</button>
+    </form>
+    </div>
+
+    <%- include('footer.ejs') %>
+</body>
+</html>
