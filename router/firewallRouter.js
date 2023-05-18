@@ -2,17 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { execSync } = require("child_process");
 
-// Sprawdzanie czy użytkownik jest zalogowany
-const requireLogin = (req, res, next) => {
-  if (!req.session.loggedIn) {
-    res.redirect("/login");
-  } else {
-    next();
-  }
-};
-
 // Ścieżka do ustawień firewalla
-router.get("/", requireLogin, (req, res) => {
+router.get("/", (req, res) => {
   // Pobierz informacje o firewallu z systemu OpenBSD
   const firewallEnabled = isFirewallEnabled();
   const firewallRules = getFirewallRules();

@@ -3,6 +3,8 @@
 <head>
   <title>Strona główna</title>
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+
   <style>
     body {
       padding-bottom: 70px;
@@ -20,12 +22,19 @@
   </style>
 </head>
 <body>
+  
   <%- include('navbar.ejs') %>
 
 
   <div class="container mt-4">
-    <h1>Witaj w aplikacji Node.js!</h1>
-    <p>Tutaj możesz zobaczyć swoje statystyki.</p>
+    <h1>Info!</h1>
+    <p>Nazwa hosta: <%= serverInfo.hostname %></p>
+    <p>Platforma: <%= serverInfo.platform %></p>
+    <p>Wersja systemu: <%= serverInfo.release %></p>
+    <p>Czas działania: <%= serverInfo.uptime %> sekund</p>
+    <p>Ilość CPU: <%= serverInfo.cpu.length %></p>
+    <p>Całkowita pamięć: <%= serverInfo.totalMemory %> bajtów</p>
+    <p>Wolna pamięć: <%= serverInfo.freeMemory %> bajtów</p>
   </div>
 
   <div class="footer">

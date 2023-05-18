@@ -2,18 +2,18 @@
 const express = require("express");
 const path = require("path");
 const session = require("express-session");
-const bodyParser = require("body-parser"); // Dodany moduł body-parser
-const settingsRouter = require("./settingsRouter");
-const firewallRouter = require("./firewallRouter");
-const statisticsRouter = require("./statisticsRouter");
-
-// Inicjalizacja aplikacji Express
+const bodyParser = require("body-parser");
+const http = require("http");
 const app = express();
+const HTTPserver = http.createServer(app);
+const { Server } = require("socket.io");
+const os = require("os");
+const routes = require("./router");
 
-// Ustawienie silnika widoku EJS
+const io = new Server(HTTPserver);
+
 app.set("view engine", "ejs");
 
-// Ustawienie ścieżki dla plików statycznych
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   "/bootstrap",
@@ -24,11 +24,10 @@ app.use(
   express.static(path.join(__dirname, "node_modules/jquery/dist"))
 );
 app.use(
-  "/socketio",
-  express.static(path.join(__dirname, "node_modules/"))
+  "/socket.io",
+  express.static(path.join(__dirname, "node_modules/socket.io/client-dist"))
 );
 
-// Konfiguracja sesji
 app.use(
   session({
     secret: "secret-key",
@@ -37,54 +36,41 @@ app.use(
   })
 );
 
-// Dodanie parsera dla danych żądania typu 'application/x-www-form-urlencoded'
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Sprawdzanie czy użytkownik jest zalogowany
-const requireLogin = (req, res, next) => {
-  if (!req.session.loggedIn) {
-    res.redirect("/login");
-  } else {
-    next();
-  }
-};
-
-// Ustawienie routera dla strony głównej
-app.get("/", requireLogin, (req, res) => {
-  res.redirect("statistics");
-});
-
-// Ustawienie routera dla strony logowania
-app.get("/login", (req, res) => {
-  res.render("login");
-});
-
-// Obsługa logowania
-app.post("/login", (req, res) => {
-  const { username, password } = req.body; // Poprawnie odczytujemy dane z formularza logowania
-
-  // Tutaj można dodać logikę weryfikacji danych logowania
-
-  // Przykładowe uwierzytelnienie - zawsze poprawne dane logowania
-  if (username === "admin" && password === "admin") {
-    req.session.loggedIn = true;
-    res.redirect("/");
-  } else {
-    res.redirect("/login");
-  }
-});
-
-app.get("/logout", (req, res) => {
-  req.session.loggedIn = false;
-  res.redirect("/login");
-});
-
-// Start serwera
 const port = 3000;
-app.listen(port, () => {
+HTTPserver.listen(port, () => {
   console.log(`Serwer działa na porcie ${port}`);
 });
 
-app.use("/settings", settingsRouter);
-app.use("/firewall", firewallRouter);
-app.use("/statistics", statisticsRouter);
+const stopSending = false;
+
+io.on("connection", (socket) => {
+  console.log("connected");
+  const networkInterface = os.networkInterfaces().em0;
+  // console.log(os.freemem());
+  // console.log(os.totalmem());
+  // console.log(os.uptime());
+  // console.log(os.cpus());
+  // console.log(os.loadavg());
+  // console.log(os.hostname());
+
+  setInterval(() => {
+    if (stopSending) return;
+
+    const rxBytes = networkInterface[0].rx_bytes;
+    const txBytes = networkInterface[0].tx_bytes;
+
+    const rxSpeed = Math.round((rxBytes * 8) / 1024);
+    const txSpeed = Math.round((txBytes * 8) / 1024);
+
+    socket.emit("networkTraffic", { rxSpeed, txSpeed });
+  }, 1000);
+});
+
+io.on("disconnect", (socket) => {
+  console.log("disconnected");
+  stopSending = true;
+});
+
+app.use("/", routes);

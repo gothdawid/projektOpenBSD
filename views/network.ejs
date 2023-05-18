@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Logowanie</title>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+  <%- include('navbar.ejs') %>
+  <div class="container mt-4">
+    <h1>Informacje o interfejsach sieciowych</h1>
+
+<% for (let interfaceName in networkInterfaces) { %>
+  <h2><%= interfaceName %></h2>
+  <p>Adresy IP:</p>
+  <ul>
+    <% networkInterfaces[interfaceName].forEach((address) => { %>
+      <li><%= address.address %></li>
+    <% }) %>
+  </ul>
+  <p>Adresy MAC:</p>
+  <ul>
+    <% networkInterfaces[interfaceName].forEach((address) => { %>
+      <li><%= address.mac %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+</div>
+
+<%- include('footer.ejs') %>
+
+</body>
+</html>

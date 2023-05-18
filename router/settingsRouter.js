@@ -2,17 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { execSync } = require("child_process");
 
-// Sprawdzanie czy użytkownik jest zalogowany
-const requireLogin = (req, res, next) => {
-  if (!req.session.loggedIn) {
-    res.redirect("/login");
-  } else {
-    next();
-  }
-};
-
 // Obsługa żądania GET na stronę ustawień
-router.get("/", requireLogin, (req, res) => {
+router.get("/", (req, res) => {
   const hostname = execSync("hostname").toString().trim();
   const networkAddress = execSync(
     'ifconfig | grep "em0" -A 7 | grep "inet " | awk \'{print $2}\''
@@ -32,7 +23,7 @@ router.get("/", requireLogin, (req, res) => {
 });
 
 // Obsługa żądania POST z formularza ustawień
-router.post("/", requireLogin, (req, res) => {
+router.post("/", (req, res) => {
   const {
     hostname,
     lanAddress,

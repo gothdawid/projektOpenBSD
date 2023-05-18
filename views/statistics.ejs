@@ -6,22 +6,27 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    // Połączenie z serwerem socket.io
-    const socket = io();
+    // Połączenie z serwerem socket.io z określonym adresem
+
+    var socket = io();
 
     // Odbieranie danych ruchu sieciowego
     socket.on('networkTraffic', (data) => {
+      console.log(data);
       document.getElementById('rxSpeed').textContent = data.rxSpeed;
       document.getElementById('txSpeed').textContent = data.txSpeed;
     });
+    socket.on("connect", () => console.log("connected"));
   </script>
 </head>
 
 <body>
 <%- include('navbar.ejs') %>
-  <h1>Statystyki ruchu sieciowego</h1>
-  <p>Przyjęta prędkość: <span id="rxSpeed"></span> kb/s</p>
-  <p>Wysyłana prędkość: <span id="txSpeed"></span> kb/s</p>
+  <div class="container mt-4">
+    <h1>Statystyki ruchu sieciowego</h1>
+    <p>Przyjęta prędkość: <span id="rxSpeed"></span> kb/s</p>
+    <p>Wysyłana prędkość: <span id="txSpeed"></span> kb/s</p>
+  </div>
 
 <%- include('footer.ejs') %>
 </body>
