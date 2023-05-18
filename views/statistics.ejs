@@ -26,8 +26,67 @@
     <h1>Statystyki ruchu sieciowego</h1>
     <p>Przyjęta prędkość: <span id="rxSpeed"></span> kb/s</p>
     <p>Wysyłana prędkość: <span id="txSpeed"></span> kb/s</p>
-  </div>
 
+  <h2>Internet:</h2>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th>Destination</th>
+        <th>Gateway</th>
+        <th>Flags</th>
+        <th>Refs</th>
+        <th>Use</th>
+        <th>Mtu</th>
+        <th>Prio</th>
+        <th>Iface</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% networkStats.internet.forEach((entry) => { %>
+        <tr>
+          <td><%= entry.destination %></td>
+          <td><%= entry.gateway %></td>
+          <td><%= entry.flags %></td>
+          <td><%= entry.refs %></td>
+          <td><%= entry.use %></td>
+          <td><%= entry.mtu %></td>
+          <td><%= entry.prio %></td>
+          <td><%= entry.iface %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <h2>Internet6:</h2>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th>Destination</th>
+        <th>Gateway</th>
+        <th>Flags</th>
+        <th>Refs</th>
+        <th>Use</th>
+        <th>Mtu</th>
+        <th>Prio</th>
+        <th>Iface</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% networkStats.internet6.forEach((entry) => { %>
+        <tr>
+          <td><%= entry.destination %></td>
+          <td><%= entry.gateway %></td>
+          <td><%= entry.flags %></td>
+          <td><%= entry.refs %></td>
+          <td><%= entry.use %></td>
+          <td><%= entry.mtu %></td>
+          <td><%= entry.prio %></td>
+          <td><%= entry.iface %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
 <%- include('footer.ejs') %>
 </body>
 
