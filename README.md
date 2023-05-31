@@ -1,18 +1,18 @@
-## WEB
+# WEB
 
-### Apache
+## Apache
 
-### Nginix
+## Nginix
 
-### NodeJS
+## NodeJS
 
-### MySQL
+## MySQL
 
-### PHPMyAdmin
+## PHPMyAdmin
 
-## DNS
+# DNS
 
-## TODO
+# TODO
 
 - serwer DNS
 - serwer NodeJS
