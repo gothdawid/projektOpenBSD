@@ -77,26 +77,72 @@ nameserver 127.0.0.1
 ```
 
 # WEB
+    sudo pkg_add -u
 
 ## Apache
 
 ```bash
+sudo pkg_add -i apache-httpd
+sudo rcctl enable apache2
+sudo rcctl stop apache2
 ```
 
 ## Nginix
 
 ```bash
+sudo pkg_add nginx
+sudo rcctl enable nginx
+sudo rcctl start nginx
 ```
+## PHP
+```bash
+sudo pkg_add php
+# Select PHP version
+sudo pkg_add php-mysqli php-pdo_mysql
+sudo pkg_add php-gd php-intl php-xmlrpc
+sudo rcctl enable php74_fpm
+sudo rcctl start php74_fpm
+sudo cp /etc/php-7.4.sample/* /etc/php-7.4    
+
+```
+
+
+**nano** or **vim** */etc/nginx/nginx.conf*
+```bash
+
+```
+
+Test nginix
+    nginx -t
+
+**nano** or **vim** * */etc/php-fpm.conf*
+```
+
+```
+
+## MySQL
+
+```bash
+sudo pkg_info -Q mysql
+sudo pkg_add -V mariadb-server 
+sudo pkg_add -v mariadb-client 
+sudo  rcctl enable mysqld     
+sudo mysql_install_db
+sudo rcctl start mysqld
+sudo rcctl stop mysqld
+sudo rcctl restart mysqld
+sudo cctl check mysqld  
+sudo mysql_secure_installation
+# confirm all
+```
+
 
 ## NodeJS
 
 ```bash
 ```
 
-## MySQL
 
-```bash
-```
 
 ## PHPMyAdmin
 
