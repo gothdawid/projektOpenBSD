@@ -7,8 +7,16 @@ echo 'net.inet.ip.forwarding=1' >> /etc/sysctl.conf
 ## Interfaces
 
 ```bash
-echo 'inet autoconf' > /etc/hostname.em0 # DHCP Client for WAN
-echo 'inet 192.168.1.1 255.255.255.0 192.168.1.255' > /etc/hostname.em1 # Static for LAN
+echo 'inet autoconf' >> /etc/hostname.em0 # DHCP Client for WAN
+echo 'up media autoselect' >> /etc/hostname.em1 
+echo 'up media autoselect' >> /etc/hostname.em2 
+echo 'up media autoselect' >> /etc/hostname.em3 
+echo 'inet 192.168.2.1 255.255.255.0 192.168.2.255' >> /etc/hostname.bridge0 # Static for LAN
+echo 'add em1' > /etc/hostname.bridge0 
+echo 'add em2' > /etc/hostname.bridge0 
+echo 'add em3' > /etc/hostname.bridge0 
+echo 'up' > /etc/hostname.bridge0
+
 ```
 
 ## DHCP Server
