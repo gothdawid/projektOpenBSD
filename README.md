@@ -1,28 +1,66 @@
 # Network
 
-    ## Interfaces
+## Interfaces
+
+```bash
+#! /bin/bash
+```
 
 ## DHCP Client
 
+```bash
+#! /bin/bash
+```
+
 ## DHCP Server
+
+```bash
+#! /bin/bash
+```
 
 ## Firewall
 
+```bash
+#! /bin/bash
+```
+
 ## DNS
+
+```bash
+#! /bin/bash
+```
 
 # WEB
 
 ## Apache
 
+```bash
+#! /bin/bash
+```
+
 ## Nginix
+
+```bash
+#! /bin/bash
+```
 
 ## NodeJS
 
+```bash
+#! /bin/bash
+```
+
 ## MySQL
+
+```bash
+#! /bin/bash
+```
 
 ## PHPMyAdmin
 
-# DNS
+```bash
+#! /bin/bash
+```
 
 # TODO
 
