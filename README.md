@@ -1,9 +1,21 @@
-### TODO
+## WEB
+
+### Apache
+
+### Nginix
+
+### NodeJS
+
+### MySQL
+
+### PHPMyAdmin
+
+## DNS
+
+## TODO
 
 - serwer DNS
-
-* serwer NodeJS
-
+- serwer NodeJS
 - serwer WWW - nginix
 - serwer AdAway
 - firewall
