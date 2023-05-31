@@ -31,10 +31,10 @@ rcctl set dhcpd flags vether0
 **vi** or **nano** _/etc/dhcpd.conf_
 
 ```conf
-subnet 192.168.1.0 netmask 255.255.255.0 {
-	option routers 192.168.1.1;
-	option domain-name-servers 192.168.1.1;
-	range 192.168.1.10 192.168.1.254;
+subnet 192.168.2.0 netmask 255.255.255.0 {
+	option routers 192.168.2.1;
+	option domain-name-servers 192.168.2.1;
+	range 192.168.2.10 192.168.2.254;
 }
 ```
 
@@ -42,14 +42,14 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 
 **vi** or **nano** _/etc/pf.conf_
 
-```conf
-wired = "bridge0"
+```bash
+wired = "vether0"
 table <martians> { 0.0.0.0/8 10.0.0.0/8 127.0.0.0/8 169.254.0.0/16 172.16.0.0/12 192.0.0.0/24 192.0.2.0/24 224.0.0.0/3 192.168.0.0/16 198.18.0.0/15 198.51.100.0/24 203.0.113.0/24 }
 set block-policy drop
 set loginterface egress
 set skip on lo0
-match in all scrub (no-df random-id max-mss 1440)
-match out on egress inet from !(egress:network) to any nat-to (egress:0)
+match in all scrub (no-df random-id max-mss 1440) # NAT
+match out on egress inet from !(egress:network) to any nat-to (egress:0) # NAT
 antispoof quick for { egress $wired }
 block in quick on egress from <martians> to any
 block return out quick on egress from any to <martians>
@@ -61,7 +61,7 @@ pass in on { $wired } inet
 pass in on egress inet proto tcp from any to (egress) port { 80 443 22 3000 }
 
 # Port forwarding
-# pass in on egress inet proto tcp from any to (egress) port { 80 443 } rdr-to 192.168.1.2
+# pass in on egress inet proto tcp from any to (egress) port { 80 443 } rdr-to 192.168.2.2
 ```
 
 ## DNS
@@ -72,11 +72,11 @@ rcctl enable unbound
 
 **vi** or **nano** _/var/unbound/etc/unbound.conf_
 
-```ini
+```bash
 server:
-    interface: 192.168.1.1
+    interface: 192.168.2.1
     interface: 127.0.0.1
-    access-control: 192.168.1.0/24 allow
+    access-control: 192.168.2.0/24 allow
 	do-not-query-localhost: no
 	hide-identity: yes
 	hide-version: yes
@@ -88,7 +88,7 @@ forward-zone:
 
 **vi** or **nano** _/etc/resolv.conf_
 
-```conf
+```bash
 # add
 nameserver 127.0.0.1
 ```
@@ -147,7 +147,7 @@ nginx -t
 pkg_info -Q mysql
 pkg_add -V mariadb-server
 pkg_add -v mariadb-client
- rcctl enable mysqld
+rcctl enable mysqld
 mysql_install_db
 rcctl start mysqld
 rcctl stop mysqld
