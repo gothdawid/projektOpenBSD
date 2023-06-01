@@ -33,7 +33,7 @@ rcctl set dhcpd flags vether0
 
 **vi** or **nano** _/etc/dhcpd.conf_
 
-```conf
+```properties
 subnet 192.168.2.0 netmask 255.255.255.0 {
 	option routers 192.168.2.1;
 	option domain-name-servers 192.168.2.1;
@@ -45,7 +45,7 @@ subnet 192.168.2.0 netmask 255.255.255.0 {
 
 **vi** or **nano** _/etc/pf.conf_
 
-```bash
+```properties
 wan = "em0"             # Untrusted
 lan = "vether0"         # Trusted
 
@@ -87,7 +87,7 @@ rcctl enable unbound
 
 **vi** or **nano** _/var/unbound/etc/unbound.conf_
 
-```bash
+```properties
 server:
     interface: 192.168.2.1
     interface: 127.0.0.1
@@ -145,7 +145,7 @@ cp /etc/php-7.4.sample/* /etc/php-7.4
 
 **nano** or **vim** _/etc/nginx/nginx.conf_
 *Change*
-```bash
+```properties
 #location ~ \.php$ {
 #	try_files      $uri $uri/ =404;
 #	fastcgi_pass   unix:run/php-fpm.sock;
@@ -155,7 +155,7 @@ cp /etc/php-7.4.sample/* /etc/php-7.4
 #}
 ```
 *TO*
-```bash
+```properties
 location ~ \.php$ {
 	try_files      $uri $uri/ =404;
 	fastcgi_pass   unix:run/php-fpm.sock;
@@ -166,8 +166,9 @@ location ~ \.php$ {
 ```
 
 *Test nginix config*
+```bash
 	nginx -t
-
+```
 
 ## MySQL
 
