@@ -1,3 +1,9 @@
+# Packages 
+
+```shell
+php_add mc nano htop
+```
+
 # Network
 
 ```bash
@@ -136,7 +142,7 @@ rcctl start nginx
 
 ## PHP
 
-_**! Select version 8.0 ! !**_
+_**! Select version 8.0 !**_
 
 ```bash
 pkg_add php
@@ -175,7 +181,7 @@ location ~ \.php$ {
 _Test nginix config_
 
 ```bash
-	nginx -t
+nginx -t
 ```
 
 ## MySQL
@@ -205,16 +211,22 @@ unzip phpMyAdmin-latest-all-languages.zip
 doas mv phpMyAdmin-*/ /var/www/htdocs/phpMyAdmin
 ```
 
-- _Go to http://<ip_addres>/phpmyadmin/setup_
-- _configure phpMyAdmin_
-- _copy config.inc.php to_
+- *Go to* `http://<ip_addres>/phpmyadmin/setup`
+- *configure phpMyAdmin*
+- *copy config.inc.php to*
   `/var/www/htdocs/phpmyadmin`
 
 ## NodeJS
 
 ```bash
-
+pkg_add node
+npm install -g npm@latest
+npm -v
 ```
+Now you can use `npm` to create project and install any package you want. 
+For example `npm install express`
+
+
 
 # TODO
 
