@@ -13,11 +13,14 @@ echo 'up media autoselect' > /etc/hostname.em2
 echo 'up media autoselect' > /etc/hostname.em3
 
 echo 'inet 192.168.2.1 255.255.255.0 192.168.2.255' > /etc/hostname.vether0 # Static for LAN
+echo 'up' >> /etc/hostname.vether0
+
 echo 'add em3' > /etc/hostname.bridge0
 echo 'add em2' >> /etc/hostname.bridge0
 echo 'add em1' >> /etc/hostname.bridge0
 echo 'add vether0 ' >> /etc/hostname.bridge0
 echo 'up' >> /etc/hostname.bridge0
+
 reboot
 ```
 
@@ -43,25 +46,37 @@ subnet 192.168.2.0 netmask 255.255.255.0 {
 **vi** or **nano** _/etc/pf.conf_
 
 ```bash
-wired = "vether0"
-table <martians> { 0.0.0.0/8 10.0.0.0/8 127.0.0.0/8 169.254.0.0/16 172.16.0.0/12 192.0.0.0/24 192.0.2.0/24 224.0.0.0/3 192.168.0.0/16 198.18.0.0/15 198.51.100.0/24 203.0.113.0/24 }
-set block-policy drop
-set loginterface egress
+wan = "em0"             # Untrusted
+lan = "vether0"         # Trusted
+
+#set block-policy return # Refuse
+set block-policy drop # Drop - no response
+set loginterface em0
 set skip on lo0
-match in all scrub (no-df random-id max-mss 1440) # NAT
-match out on egress inet from !(egress:network) to any nat-to (egress:0) # NAT
-antispoof quick for { egress $wired }
-block in quick on egress from <martians> to any
-block return out quick on egress from any to <martians>
-block all
-pass out quick inet
-pass in on { $wired } inet
 
-# Allow HTTP SSH FTP NODEJS to localhost
-pass in on egress inet proto tcp from any to (egress) port { 80 443 22 3000 }
+## NAT
+match in all scrub (no-df random-id max-mss 1440)
+match out on em0 inet from !(em0:network) to any nat-to (em0)
 
-# Port forwarding
-# pass in on egress inet proto tcp from any to (egress) port { 80 443 } rdr-to 192.168.2.2
+pass in quick on $lan all
+pass out quick on $lan all
+
+block in log on $wan all
+
+## Open ports
+pass in on $wan proto tcp from any to any port { ssh, https, http, ftp, sftp } keep state
+pass in on $wan proto udp from any to any port { domain, ntp, http } keep state
+
+## Redirect
+pass in on $wan inet proto tcp from any to (em0) port 2222 rdr-to 192.168.2.5 port 22
+
+## PING
+pass in on $wan inet proto icmp all icmp-type 8 code 0 keep state
+pass out on $wan inet proto icmp all icmp-type 8 code 0 keep state
+
+## Allow UDP/TCP OUT
+pass out on $wan proto udp all keep state
+pass out on $wan proto tcp all modulate state
 ```
 
 ## DNS
