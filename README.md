@@ -87,7 +87,7 @@ rcctl enable unbound
 
 **vi** or **nano** _/var/unbound/etc/unbound.conf_
 
-```nginx
+```yaml
 server:
     interface: 192.168.2.1
     interface: 127.0.0.1
