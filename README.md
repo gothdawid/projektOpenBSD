@@ -198,17 +198,17 @@ mysql_secure_installation
 
 ```bash
 pkg_add phpmyadmin unzip
-cp -fR /var/www/phpMyAdmin /var/www/htdocs 
+cp -fR /var/www/phpMyAdmin /var/www/htdocs
 cd /tmp
 wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.zip
-unzip phpMyAdmin-latest-all-languages.zip  
+unzip phpMyAdmin-latest-all-languages.zip
 doas mv phpMyAdmin-*/ /var/www/htdocs/phpMyAdmin
 ```
-- *Go to http://<ip_addres>/phpmyadmin/setup*
-- *configure phpMyAdmin*
-- *copy config.inc.php to*
 
-	/var/www/htdocs/phpmyadmin
+- _Go to http://<ip_addres>/phpmyadmin/setup_
+- _configure phpMyAdmin_
+- _copy config.inc.php to_
+  `/var/www/htdocs/phpmyadmin`
 
 ## NodeJS
 
