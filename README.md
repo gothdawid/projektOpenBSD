@@ -87,7 +87,7 @@ rcctl enable unbound
 
 **vi** or **nano** _/var/unbound/etc/unbound.conf_
 
-```json
+```nginx
 server:
     interface: 192.168.2.1
     interface: 127.0.0.1
@@ -120,6 +120,7 @@ rcctl start apache2
 ```
 
 ![ApacheWorks](img/apache_works.png "Apache Works!")
+
 ```bash
 rcctl stop apache2
 rcctl disable apache2
@@ -134,6 +135,7 @@ rcctl start nginx
 ```
 
 ## PHP
+
 ```bash
 pkg_add php
 pkg_add php-mysqli php-pdo_mysql php-gd php-intl php-xmlrpc
@@ -144,7 +146,8 @@ cp /etc/php-7.4.sample/* /etc/php-7.4
 ```
 
 **nano** or **vim** _/etc/nginx/nginx.conf_
-*Change*
+_Change_
+
 ```nginx
 #location ~ \.php$ {
 #	try_files      $uri $uri/ =404;
@@ -154,7 +157,9 @@ cp /etc/php-7.4.sample/* /etc/php-7.4
 #	include        fastcgi_params;
 #}
 ```
-*TO*
+
+_TO_
+
 ```nginx
 location ~ \.php$ {
 	try_files      $uri $uri/ =404;
@@ -165,7 +170,8 @@ location ~ \.php$ {
 }
 ```
 
-*Test nginix config*
+_Test nginix config_
+
 ```bash
 	nginx -t
 ```
