@@ -204,9 +204,9 @@ wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.zip
 unzip phpMyAdmin-latest-all-languages.zip  
 doas mv phpMyAdmin-*/ /var/www/htdocs/phpMyAdmin
 ```
-*Go to http://<ip_addres>/phpmyadmin/setup*
-*configure phpMyAdmin*
-*copy config.inc.php to*
+- *Go to http://<ip_addres>/phpmyadmin/setup*
+- *configure phpMyAdmin*
+- *copy config.inc.php to*
 
 	/var/www/htdocs/phpmyadmin
 
