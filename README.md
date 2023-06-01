@@ -116,11 +116,14 @@ nameserver 127.0.0.1
 
 ```bash
 pkg_add -i apache-httpd
-rcctl enable apache2
 rcctl start apache2
 ```
 
-![ApacheWorks](apache_works.png)
+![ApacheWorks](img/apache_works.png "Apache Works!")
+```bash
+rcctl stop apache2
+rcctl disable apache2
+```
 
 ## Nginix
 
@@ -131,12 +134,9 @@ rcctl start nginx
 ```
 
 ## PHP
-
 ```bash
 pkg_add php
-# Select PHP version
-pkg_add php-mysqli php-pdo_mysql
-pkg_add php-gd php-intl php-xmlrpc
+pkg_add php-mysqli php-pdo_mysql php-gd php-intl php-xmlrpc
 rcctl enable php74_fpm
 rcctl start php74_fpm
 cp /etc/php-7.4.sample/* /etc/php-7.4
@@ -144,19 +144,30 @@ cp /etc/php-7.4.sample/* /etc/php-7.4
 ```
 
 **nano** or **vim** _/etc/nginx/nginx.conf_
-
+*Change*
 ```bash
-
+#location ~ \.php$ {
+#	try_files      $uri $uri/ =404;
+#	fastcgi_pass   unix:run/php-fpm.sock;
+#	fastcgi_index  index.php;
+#	fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+#	include        fastcgi_params;
+#}
+```
+*TO*
+```bash
+location ~ \.php$ {
+	try_files      $uri $uri/ =404;
+	fastcgi_pass   unix:run/php-fpm.sock;
+	fastcgi_index  index.php;
+	fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+	include        fastcgi_params;
+}
 ```
 
-Test nginix
-nginx -t
+*Test nginix config*
+	nginx -t
 
-**nano** or **vim** \* _/etc/php-fpm.conf_
-
-```
-
-```
 
 ## MySQL
 
