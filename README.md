@@ -136,12 +136,14 @@ rcctl start nginx
 
 ## PHP
 
+_**! Select version 8.0 ! !**_
+
 ```bash
 pkg_add php
 pkg_add php-mysqli php-pdo_mysql php-gd php-intl php-xmlrpc
-rcctl enable php74_fpm
-rcctl start php74_fpm
-cp /etc/php-7.4.sample/* /etc/php-7.4
+rcctl enable php80_fpm
+rcctl start php80_fpm
+cp /etc/php-8.0.sample/* /etc/php-8.0
 
 ```
 
@@ -179,26 +181,36 @@ _Test nginix config_
 ## MySQL
 
 ```bash
-pkg_info -Q mysql
 pkg_add -V mariadb-server
 pkg_add -v mariadb-client
 rcctl enable mysqld
 mysql_install_db
 rcctl start mysqld
 rcctl stop mysqld
-rcctl restart mysqld
-cctl check mysqld
+rcctl start mysqld
+
+rcctl check mysqld
 mysql_secure_installation
-# confirm all
-```
-
-## NodeJS
-
-```bash
-
+# confirm all typing "Y"
 ```
 
 ## PHPMyAdmin
+
+```bash
+pkg_add phpmyadmin unzip
+cp -fR /var/www/phpMyAdmin /var/www/htdocs 
+cd /tmp
+wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.zip
+unzip phpMyAdmin-latest-all-languages.zip  
+doas mv phpMyAdmin-*/ /var/www/htdocs/phpMyAdmin
+```
+*Go to http://<ip_addres>/phpmyadmin/setup*
+*configure phpMyAdmin*
+*copy config.inc.php to*
+
+	/var/www/htdocs/phpmyadmin
+
+## NodeJS
 
 ```bash
 
