@@ -249,7 +249,7 @@ For example `npm install express`
 </details>
 
 ```mermaid
-graph TD;
+graph LR;
     A-->B;
     B-->C;
 	C-->D;
