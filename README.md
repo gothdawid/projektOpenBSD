@@ -117,8 +117,10 @@ nameserver 127.0.0.1
 ```bash
 pkg_add -i apache-httpd
 rcctl enable apache2
-rcctl stop apache2
+rcctl start apache2
 ```
+
+![ApacheWorks](apache_works.png)
 
 ## Nginix
 
