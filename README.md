@@ -230,16 +230,19 @@ For example `npm install express`
 
 # TODO
 
-- serwer DNS
-- serwer NodeJS
-- serwer WWW - nginix
-- mysql
-- firewall
-- phpmyadmin
-- nano, htop, mc
-- FTP/SFTP
-- ~~SAMBA~~
-- ~~Serwer Poczty (Postfix)~~
-- ~~tcpdump~~
-- ~~VPN/proxy IPsec OpenVPN~~
-- ~~serwer AdAway~~
+- [x] DNS
+- [x] DHCP
+- [x] Apache
+- [x] PHP
+- [x] MariaDB
+- [ ] SSH
+- [x] Network bridge
+- [x] NodeJS
+- [x] WWW - nginix
+- [x] firewall
+- [x] phpmyadmin
+- [x] nano, htop, mc
+- [ ] FTP/SFTP
+- [ ] ~~SAMBA~~
+- [ ] ~~VPN/proxy IPsec OpenVPN~~
+- [ ] ~~AdAway~~
