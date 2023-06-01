@@ -1,4 +1,4 @@
-# Packages 
+# Packages
 
 ```shell
 php_add mc nano htop
@@ -211,9 +211,9 @@ unzip phpMyAdmin-latest-all-languages.zip
 doas mv phpMyAdmin-*/ /var/www/htdocs/phpMyAdmin
 ```
 
-- *Go to* `http://<ip_addres>/phpmyadmin/setup`
-- *configure phpMyAdmin*
-- *copy config.inc.php to*
+- _Go to_ `http://<ip_addres>/phpmyadmin/setup`
+- _configure phpMyAdmin_
+- _copy config.inc.php to_
   `/var/www/htdocs/phpmyadmin`
 
 ## NodeJS
@@ -223,13 +223,13 @@ pkg_add node
 npm install -g npm@latest
 npm -v
 ```
-Now you can use `npm` to create project and install any package you want. 
+
+Now you can use `npm` to create project and install any package you want.
 For example `npm install express`
-
-
 
 # TODO
 
+<details>
 - [x] DNS
 - [x] DHCP
 - [x] Apache
@@ -246,3 +246,13 @@ For example `npm install express`
 - [ ] ~~SAMBA~~
 - [ ] ~~VPN/proxy IPsec OpenVPN~~
 - [ ] ~~AdAway~~
+</details>
+
+```mermaid
+graph TD;
+    A-->B;
+    B-->C;
+	C-->D;
+	D-->E;
+	E-->A;
+```
