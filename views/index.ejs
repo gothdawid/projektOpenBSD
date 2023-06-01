@@ -4,7 +4,17 @@
   <title>Strona główna</title>
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
   <script src="/bootstrap/js/bootstrap.min.js"></script>
+  <%
+    function calculateMemoryUsage(totalMemory, freeMemory) {
+      const usedMemory = totalMemory - freeMemory;
+      return ((usedMemory / totalMemory) * 100).toFixed(2);
+    }
+    function formatMemory(memory) {
+      const megabytes = memory / (1024 * 1024);
+      return megabytes.toFixed(2);
+    }
 
+  %>
   <style>
     body {
       padding-bottom: 70px;
@@ -28,18 +38,70 @@
 
   <div class="container mt-4">
     <h1>Info!</h1>
-    <p>Nazwa hosta: <%= serverInfo.hostname %></p>
-    <p>Platforma: <%= serverInfo.platform %></p>
-    <p>Wersja systemu: <%= serverInfo.release %></p>
-    <p>Czas działania: <%= serverInfo.uptime %> sekund</p>
-    <p>Ilość CPU: <%= serverInfo.cpu.length %></p>
-    <p>Całkowita pamięć: <%= serverInfo.totalMemory %> bajtów</p>
-    <p>Wolna pamięć: <%= serverInfo.freeMemory %> bajtów</p>
-  </div>
 
-  <div class="footer">
-    Przykładowa stopka z danymi &copy; 2023
-  </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Nazwa hosta</h5>
+            <p class="card-text"><%= serverInfo.hostname %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Ilość CPU</h5>
+            <p class="card-text"><%= serverInfo.cpu.length %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Pamięć</h5>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" style="width: <%= calculateMemoryUsage(serverInfo.totalMemory, serverInfo.freeMemory) %>%" aria-valuenow="<%= calculateMemoryUsage(serverInfo.totalMemory, serverInfo.freeMemory) %>" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <p class="card-text">
+              <span>Zajęta: <%= formatMemory(serverInfo.totalMemory - serverInfo.freeMemory) %> MB</span>
+              <span>Wolna: <%= formatMemory(serverInfo.freeMemory) %> MB</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Platforma</h5>
+            <p class="card-text"><%= serverInfo.platform %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Wersja systemu</h5>
+            <p class="card-text"><%= serverInfo.release %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <!-- czas działąnia -->
+      <div class="col-md-12">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Czas działania</h5>
+            <p class="card-text"><%= serverInfo.uptime %> sekund</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
   <%- include('footer.ejs') %>
 
