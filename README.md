@@ -229,7 +229,6 @@ For example `npm install express`
 
 # TODO
 
-<details>
 - [x] DNS
 - [x] DHCP
 - [x] Apache
@@ -246,13 +245,4 @@ For example `npm install express`
 - [ ] ~~SAMBA~~
 - [ ] ~~VPN/proxy IPsec OpenVPN~~
 - [ ] ~~AdAway~~
-</details>
 
-```mermaid
-graph LR;
-    A-->B;
-    B-->C;
-	C-->D;
-	D-->E;
-	E-->A;
-```
