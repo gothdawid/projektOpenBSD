@@ -6,14 +6,23 @@ const { execSync } = require("child_process");
 router.get("/", (req, res) => {
   // Pobierz informacje o firewallu z systemu OpenBSD
   const firewallEnabled = isFirewallEnabled();
-  const firewallRules = getFirewallRules();
+  const firewallNatEnabled = isFirewallNatEnabled();
+  const securityLevel = getSecurityLevel();
+  const sshAccess = getSSHAccess();
+  const customRules = getCustomRules();
 
-  res.render("firewall", { firewallEnabled, firewallRules });
+  res.render("firewall", {
+    firewallEnabled,
+    firewallNatEnabled,
+    securityLevel,
+    sshAccess,
+    customRules,
+  });
 });
 
 // Obsługa zapisu ustawień firewalla
 router.post("/", (req, res) => {
-  const { enable, rules } = req.body;
+  const { enable, nat, securityLevel, sshAccess, customRules } = req.body;
 
   // Wykonaj odpowiednie operacje zapisu ustawień firewalla
 
@@ -26,10 +35,31 @@ function isFirewallEnabled() {
   return output.includes("Status: Enabled");
 }
 
-// Funkcja pomocnicza do pobierania reguł firewalla
-function getFirewallRules() {
-  const output = execSync("pfctl -sr").toString();
-  return output;
+// Funkcja pomocnicza do sprawdzania czy NAT jest włączony
+function isFirewallNatEnabled() {
+  const output = execSync("pfctl -si").toString();
+  return output.includes("NAT: Enabled");
+}
+
+// Funkcja pomocnicza do pobierania poziomu zabezpieczeń
+function getSecurityLevel() {
+  // Pobierz poziom zabezpieczeń z odpowiedniego pliku konfiguracyjnego
+  // np. securityLevel = readConfigFile("security.conf");
+  return 2; // Przykładowa wartość
+}
+
+// Funkcja pomocnicza do pobierania dostępu SSH
+function getSSHAccess() {
+  // Pobierz informacje o dostępie SSH z odpowiedniego pliku konfiguracyjnego
+  // np. sshAccess = readConfigFile("ssh.conf");
+  return "enabled"; // Przykładowa wartość
+}
+
+// Funkcja pomocnicza do pobierania własnych reguł
+function getCustomRules() {
+  // Pobierz własne reguły z odpowiedniego pliku konfiguracyjnego
+  // np. customRules = readConfigFile("custom_rules.conf");
+  return ""; // Przykładowa wartość
 }
 
 module.exports = router;
