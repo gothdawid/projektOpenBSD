@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Strona główna</title>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+
+  <style>
+    body {
+      padding-bottom: 70px;
+    }
+
+    .footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: #f8f9fa;
+      text-align: center;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  
+  <%- include('navbar.ejs') %>
+
+
+  <div class="container mt-4">
+    <h1>Info!</h1>
+    <p>Nazwa hosta: <%= serverInfo.hostname %></p>
+    <p>Platforma: <%= serverInfo.platform %></p>
+    <p>Wersja systemu: <%= serverInfo.release %></p>
+    <p>Czas działania: <%= serverInfo.uptime %> sekund</p>
+    <p>Ilość CPU: <%= serverInfo.cpu.length %></p>
+    <p>Całkowita pamięć: <%= serverInfo.totalMemory %> bajtów</p>
+    <p>Wolna pamięć: <%= serverInfo.freeMemory %> bajtów</p>
+  </div>
+
+  <div class="footer">
+    Przykładowa stopka z danymi &copy; 2023
+  </div>
+
+  <%- include('footer.ejs') %>
+
+</body>
+</html>

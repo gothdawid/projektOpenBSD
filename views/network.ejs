@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Informacje o interfejsach sieciowych</title>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+  <%- include('navbar.ejs') %>
+  <div class="container mt-4">
+    <h1>Informacje o interfejsach sieciowych</h1>
+
+    <% for (let i = 0; i < networkInterfaces.length; i++) {
+      const interface = networkInterfaces[i];
+    %>
+    <div class="card mt-4">
+      <div class="card-body">
+        <h2>
+          <%= interface.name %> 
+          <%= interface.status %>
+        </h2>
+        <div class="row align-items-end">
+          <div class="col">
+            <p><strong>Flags:</strong> <%= interface.flags.join(", ") %></p>
+          </div>
+          <div class="col">
+            <p><strong>MTU:</strong> <%= interface.mtu %></p> 
+          </div>
+        </div>
+        <div class="row align-items-end">
+          <div class="col">
+            <p><strong>Address6:</strong> <%= interface.address6 %></p>
+            <p><strong>Prefix6:</strong> <%= interface.prefix6 %></p>
+          </div>
+          <div class="col">
+              <p><strong>Address:</strong> <%= interface.address %></p>
+              <p><strong>Netmask:</strong> <%= interface.netmask %></p>
+          </div>
+        </div>
+        <div class="row align-items-end">
+          <div class="col">
+            <p><strong>Speed:</strong> <%= interface.speed %></p>
+          </div>
+          <div class="col">
+            <p><strong>Duplex:</strong> <%= interface.duplex %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+
+  <%- include('footer.ejs') %>
+
+</body>
+</html>

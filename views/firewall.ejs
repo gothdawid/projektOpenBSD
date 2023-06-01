@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ustawienia Firewalla</title>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+    <%- include('navbar.ejs') %>
+
+    <div class="container mt-4">
+    <h1>Ustawienia Firewalla</h1>
+    <form action="/firewall" method="POST">
+        <div class="form-group">
+            <label for="enable">Włącz firewall:</label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="enable" name="enable" <% if (firewallEnabled) { %>checked<% } %>>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="nat">Włącz NAT:</label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="nat" name="nat" <% if (firewallNatEnabled) { %>checked<% } %>>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="securityLevel">Poziom zabezpieczeń:</label>
+            <input type="number" class="form-control" id="securityLevel" name="securityLevel" min="1" max="3" value="<%= securityLevel %>">
+        </div>
+        <div class="form-group">
+            <label for="sshAccess">Dostęp SSH:</label>
+            <select class="form-control" id="sshAccess" name="sshAccess">
+                <option value="enabled" <% if (sshAccess === 'enabled') { %>selected<% } %>>Włączony</option>
+                <option value="disabled" <% if (sshAccess === 'disabled') { %>selected<% } %>>Wyłączony</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="customRules">Własne reguły:</label>
+            <textarea class="form-control" id="customRules" name="customRules" rows="4"><%= customRules %></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Zapisz</button>
+    </form>
+    </div>
+
+    <%- include('footer.ejs') %>
+</body>
+</html>
