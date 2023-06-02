@@ -7,16 +7,12 @@ router.get("/", (req, res) => {
   // Pobierz informacje o firewallu z systemu OpenBSD
   const firewallEnabled = isFirewallEnabled();
   const firewallNatEnabled = isFirewallNatEnabled();
-  const securityLevel = getSecurityLevel();
-  const sshAccess = getSSHAccess();
-  const customRules = getCustomRules();
+  const openPorts = getOpenPorts();
 
   res.render("firewall", {
     firewallEnabled,
     firewallNatEnabled,
-    securityLevel,
-    sshAccess,
-    customRules,
+    openPorts,
   });
 });
 
@@ -37,29 +33,65 @@ function isFirewallEnabled() {
 
 // Funkcja pomocnicza do sprawdzania czy NAT jest włączony
 function isFirewallNatEnabled() {
-  const output = execSync("pfctl -si").toString();
-  return output.includes("NAT: Enabled");
-}
+  // jeśli plik /etc/pf.conf zawiera wpis
+  // match in all scrub (no-df random-id max-mss 1440)
+  // match out on em0 inet from !(em0:network) to any nat-to (em0)
+  // to NAT jest włączony
+  // jeśli przed tymi niniami jest # to jest wyłączony
 
-// Funkcja pomocnicza do pobierania poziomu zabezpieczeń
-function getSecurityLevel() {
-  // Pobierz poziom zabezpieczeń z odpowiedniego pliku konfiguracyjnego
-  // np. securityLevel = readConfigFile("security.conf");
-  return 2; // Przykładowa wartość
+  const output = execSync("cat /etc/pf.conf").toString().split("\n");
+  let natEnabled = 0;
+
+  if (isFirewallEnabled()) natEnabled++;
+
+  output.forEach((line) => {
+    if (
+      line.includes("match in all scrub (no-df random-id max-mss 1440)") &&
+      !line.includes("#match in all scrub (no-df random-id max-mss 1440)")
+    ) {
+      natEnabled++;
+    }
+    if (
+      line.includes(
+        "match out on em0 inet from !(em0:network) to any nat-to (em0)"
+      ) &&
+      !line.includes(
+        "#match out on em0 inet from !(em0:network) to any nat-to (em0)"
+      )
+    ) {
+      natEnabled++;
+    }
+  });
+
+  let Enabled = false;
+  if (natEnabled == 3) {
+    Enabled = true;
+  }
+
+  return Enabled;
 }
 
 // Funkcja pomocnicza do pobierania dostępu SSH
-function getSSHAccess() {
-  // Pobierz informacje o dostępie SSH z odpowiedniego pliku konfiguracyjnego
-  // np. sshAccess = readConfigFile("ssh.conf");
-  return "enabled"; // Przykładowa wartość
-}
+function getOpenPorts() {
+  // pass in on $wan proto tcp from any to any port { ssh, https, http, ftp, sftp, 3000 } keep state
+  // pass in on $wan proto udp from any to any port { domain, ntp, http, 3000 } keep state
 
-// Funkcja pomocnicza do pobierania własnych reguł
-function getCustomRules() {
-  // Pobierz własne reguły z odpowiedniego pliku konfiguracyjnego
-  // np. customRules = readConfigFile("custom_rules.conf");
-  return ""; // Przykładowa wartość
+  const output = execSync("cat /etc/pf.conf").toString().split("\n");
+  let openPorts = {
+    tcp: [],
+    udp: []
+  };
+  output.forEach((line) => {
+    if (line.includes("pass in on $wan proto tcp from any to any port")) {
+      openTCPports = line.split("{ ")[1].split(" }")[0].split(", ");
+      openPorts.tcp = openTCPports;
+    }
+    if (line.includes("pass in on $wan proto udp from any to any port")) {
+      openUDPports = line.split("{ ")[1].split(" }")[0].split(", ");
+      openPorts.udp = openUDPports;
+    }
+  });
+  return openPorts;
 }
 
 module.exports = router;

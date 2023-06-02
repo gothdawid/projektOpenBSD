@@ -3,6 +3,11 @@
 <head>
   <title>Ustawienia</title>
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <style>
+    .form-check-label {
+      margin-left: 1rem;
+    }
+  </style>
 </head>
 <body>
   <%- include('navbar.ejs') %>
@@ -10,38 +15,42 @@
   <div class="container mt-4">
     <h1>Ustawienia</h1>
     <form action="/settings" method="POST">
-      <div class="form-group">
-        <label for="hostname">Nazwa hosta</label>
-        <input type="text" class="form-control" id="hostname" name="hostname" value="<%= hostname %>" required>
-      </div>
-      <div class="form-group">
-        <label for="lanAddress">Adres sieci LAN</label>
-        <input type="text" class="form-control" id="lanAddress" name="lanAddress" value="<%= lanAddress %>" required>
-      </div>
-      <div class="form-group">
-        <label for="wanMode">WAN</label>
-        <select class="form-control" id="wanMode" name="wanMode" required>
-          <option value="dhcp" <%= wanMode === 'dhcp' ? 'selected' : '' %>>DHCP</option>
-          <option value="static" <%= wanMode === 'static' ? 'selected' : '' %>>Statyczne</option>
-        </select>
-      </div>
-      <% if (wanMode === 'static') { %>
-      <div class="form-group">
-        <label for="staticWanAddress">Adres WAN</label>
-        <input type="text" class="form-control" id="staticWanAddress" name="staticWanAddress" value="<%= staticWanAddress %>" required>
-      </div>
-      <% } %>
-      <div class="form-group">
-        <label for="dnsServers">Adresy serwerów DNS</label>
-        <input type="text" class="form-control" id="dnsServers" name="dnsServers" value="<%= dnsServers %>" required>
-      </div>
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="dhcpEnabled" name="dhcpEnabled" <%= dhcpEnabled ? 'checked' : '' %>>
-        <label class="form-check-label" for="dhcpEnabled">DHCP</label>
-      </div>
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="dnsEnabled" name="dnsEnabled" <%= dnsEnabled ? 'checked' : '' %>>
-        <label class="form-check-label" for="dnsEnabled">DNS</label>
+      <div class="card">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="hostname">Nazwa hosta</label>
+            <input type="text" class="form-control" id="hostname" name="hostname" value="<%= hostname %>" required>
+          </div>
+          <div class="form-group">
+            <label for="lanAddress">Adres sieci LAN</label>
+            <input type="text" class="form-control" id="lanAddress" name="lanAddress" value="<%= lanAddress %>" required>
+          </div>
+          <div class="form-group">
+            <label for="wanMode">WAN</label>
+            <select class="form-control" id="wanMode" name="wanMode" required>
+              <option value="dhcp" <%= wanMode === 'dhcp' ? 'selected' : '' %>>DHCP</option>
+              <option value="static" <%= wanMode === 'static' ? 'selected' : '' %>>Statyczne</option>
+            </select>
+          </div>
+          <% if (wanMode === 'static') { %>
+          <div class="form-group">
+            <label for="staticWanAddress">Adres WAN</label>
+            <input type="text" class="form-control" id="staticWanAddress" name="staticWanAddress" value="<%= staticWanAddress %>" required>
+          </div>
+          <% } %>
+          <div class="form-group">
+            <label for="dnsServers">Adresy serwerów DNS</label>
+            <input type="text" class="form-control" id="dnsServers" name="dnsServers" value="<%= dnsServers %>" required>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="dhcpEnabled" name="dhcpEnabled" <%= dhcpEnabled ? 'checked' : '' %>>
+            <label class="form-check-label" for="dhcpEnabled">DHCP</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="dnsEnabled" name="dnsEnabled" <%= dnsEnabled ? 'checked' : '' %>>
+            <label class="form-check-label" for="dnsEnabled">DNS</label>
+          </div>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary mt-3">Zapisz</button>
     </form>
