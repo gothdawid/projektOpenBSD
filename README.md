@@ -70,8 +70,8 @@ pass out quick on $lan all
 block in log on $wan all
 
 ## Open ports
-pass in on $wan proto tcp from any to any port { ssh, https, http, ftp, sftp } keep state
-pass in on $wan proto udp from any to any port { domain, ntp, http } keep state
+pass in on $wan proto tcp from any to any port { ssh, https, http, ftp, sftp, 3000  } keep state
+pass in on $wan proto udp from any to any port { domain, ntp, http, 3000 } keep state
 
 ## Redirect
 pass in on $wan inet proto tcp from any to (em0) port 2222 rdr-to 192.168.2.5 port 22
