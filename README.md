@@ -227,6 +227,65 @@ npm -v
 Now you can use `npm` to create project and install any package you want.
 For example `npm install express`
 
+# NAS/SAMBA
+
+```bash
+pkg_add samba
+```
+
+**vi** or **nano** _/etc/samba/smb.conf_
+
+```ini
+[global]
+workgroup = WORKGROUP
+netbios name = File Server
+server string = OpenBSD Samba Server
+max log size = 100
+local master = yes
+os level = 100
+invalid users = nobody root
+load printers = no
+max connections = 10
+preferred master = yes
+preserve case = no
+disable netbios = yes
+dns proxy = no
+domain master = yes
+default case = lower
+encrypt passwords = yes
+security = user
+hosts allow = 192.168.2.0/24 127.0.0.1
+hosts deny = all
+bind interfaces only = yes
+interfaces = vether0
+guest ok = yes
+guest only = yes
+socket options = TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=65536 SO_SNDBUF=65536
+strict sync = no
+sync always = no
+syslog = 1
+syslog only = yes
+
+[Files]
+comment = files
+create mask = 644
+path = /home/sambauser/files
+writeable = yes
+valid users = sambauser
+read only = no
+browseable = yes
+```
+
+```bash
+mkdir /home/sambauser
+mkdir /home/sambauser/files
+smbpasswd -a sambauser
+/etc/rc.d/samba restart
+
+# Start on boot
+echo "/etc/rc.d/samba start" >> /etc/rc.local
+```
+
 # TODO
 
 - [x] DNS
