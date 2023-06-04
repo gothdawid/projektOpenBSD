@@ -287,6 +287,24 @@ smbpasswd -a sambauser
 echo "/etc/rc.d/samba start" >> /etc/rc.local
 ```
 
+# Web GUI
+
+## Info
+
+![Info](img/info.png)
+
+## Stats
+
+![Stats](img/stats.png)
+
+## Network
+
+![Network](img/net.png)
+
+## Firewall
+
+![Firewall](img/firewall.png)
+
 # TODO
 
 - [x] DNS
