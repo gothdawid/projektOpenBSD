@@ -279,6 +279,7 @@ browseable = yes
 ```bash
 mkdir /home/sambauser
 mkdir /home/sambauser/files
+chown nobody:nobody /home/sambauser/files
 smbpasswd -a sambauser
 /etc/rc.d/samba restart
 
@@ -293,14 +294,10 @@ echo "/etc/rc.d/samba start" >> /etc/rc.local
 - [x] Apache
 - [x] PHP
 - [x] MariaDB
-- [ ] SSH
 - [x] Network bridge
 - [x] NodeJS
 - [x] WWW - nginix
 - [x] firewall
 - [x] phpmyadmin
 - [x] nano, htop, mc
-- [ ] FTP/SFTP
-- [ ] SAMBA + drivers
-- [ ] ~~VPN/proxy IPsec OpenVPN~~
-- [ ] ~~AdAway~~
+- [x] SAMBA
