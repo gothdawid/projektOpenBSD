@@ -8,15 +8,15 @@
   <script>
     // Połączenie z serwerem socket.io z określonym adresem
 
-    var socket = io();
+    // var socket = io();
 
-    // Odbieranie danych ruchu sieciowego
-    socket.on('networkTraffic', (data) => {
-      console.log(data);
-      document.getElementById('rxSpeed').textContent = data.rxSpeed;
-      document.getElementById('txSpeed').textContent = data.txSpeed;
-    });
-    socket.on("connect", () => console.log("connected"));
+    // // Odbieranie danych ruchu sieciowego
+    // socket.on('networkTraffic', (data) => {
+    //   console.log(data);
+    //   document.getElementById('rxSpeed').textContent = data.rxSpeed;
+    //   document.getElementById('txSpeed').textContent = data.txSpeed;
+    // });
+    // socket.on("connect", () => console.log("connected"));
   </script>
 </head>
 
@@ -24,8 +24,8 @@
 <%- include('navbar.ejs') %>
   <div class="container mt-4">
     <h1>Statystyki ruchu sieciowego</h1>
-    <p>Przyjęta prędkość: <span id="rxSpeed"></span> kb/s</p>
-    <p>Wysyłana prędkość: <span id="txSpeed"></span> kb/s</p>
+    <!-- <p>Przyjęta prędkość: <span id="rxSpeed"></span> kb/s</p>
+    <p>Wysyłana prędkość: <span id="txSpeed"></span> kb/s</p> -->
 
   <h2>Internet:</h2>
   <table class="table">
