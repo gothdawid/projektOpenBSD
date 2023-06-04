@@ -3,9 +3,14 @@
 <head>
   <title>Ustawienia Firewalla</title>
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <style>
+    .card {
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-    <% - include('navbar.ejs') -%>
+    <%- include('navbar.ejs') -%>
 
     <div class="container mt-4">
     <h1>Ustawienia Firewalla</h1>
@@ -16,7 +21,6 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                
                     <div class="form-group col-md-6 row">
                         <label class="col-md-4" for="enable">Włącz firewall:</label>
                         <div class="form-check col-md-8">
@@ -29,7 +33,6 @@
                             <input class="form-check-input" type="checkbox" id="nat" name="nat" <% if (firewallNatEnabled) { %>checked<% } %>>
                         </div>
                     </div>
-                        
                 </div>
             </div>
         </div>
@@ -40,11 +43,11 @@
                     <div class="card-header">
                         <h5 class="card-title">Otwarte porty TCP</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" id="TCPPorts">
                         <% openPorts.tcp.forEach(function(port) { %>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="tcpPort<%= port %>" name="tcpPort" value="<%= port %>" checked>
-                                <label class="form-check-label" for="tcpPort<%= port %>"><%= port %></label>
+                                <input class="form-check-input" type="checkbox" id="tcpPort<%= port.trim() %>" name="tcpPort" value="<%= port.trim() %>" checked>
+                                <label class="form-check-label" for="tcpPort<%= port.trim() %>"><%= port.trim() %></label>
                             </div>
                         <% }); %>
                     </div>
@@ -55,11 +58,11 @@
                     <div class="card-header">
                         <h5 class="card-title">Otwarte porty UDP</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" id="UDPPorts">
                         <% openPorts.udp.forEach(function(port) { %>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="udpPort<%= port %>" name="udpPort" value="<%= port %>" checked>
-                                <label class="form-check-label" for="udpPort<%= port %>"><%= port %></label>
+                                <input class="form-check-input" type="checkbox" id="udpPort<%= port.trim() %>" name="udpPort" value="<%= port.trim() %>" checked>
+                                <label class="form-check-label" for="udpPort<%= port.trim() %>"><%= port.trim() %></label>
                             </div>
                         <% }); %>
                     </div>
@@ -67,10 +70,80 @@
             </div>
         </div>
 
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Dodaj nowy port</h5>
+            </div>
+            <div class="card-body row">
+                <div class="form-group col-md-3">
+                    <label for="portType">Typ portu:</label>
+                    <select class="form-control" id="portType" name="portType">
+                        <option value="tcp">TCP</option>
+                        <option value="udp">UDP</option>
+                    </select>
+                </div>
+                <div class="form-group  col-md-6">
+                    <label for="newPort">Nowy port:</label>
+                    <input type="text" class="form-control" id="newPort" name="newPort">
+                </div>
+                <button type="button" class="btn btn-primary col-md-3 mt-4" id="addPortBtn">Dodaj</button>
+            </div>
+        </div>
         <button type="submit" class="btn btn-primary mt-4">Zapisz</button>
     </form>
     </div>
 
-    <% - include('footer.ejs') -%>
+    <%- include('footer.ejs') -%>
+
+    <script>
+      document.getElementById("addPortBtn").addEventListener("click", function() {
+        var portType = document.getElementById("portType").value;
+        var newPort = document.getElementById("newPort").value;
+        
+        if (newPort === "") {
+            return;
+        }
+
+        if (document.getElementById(portType + "Port" + newPort) !== null) {
+            alert("Port " + newPort + " już istnieje.");
+            return;
+        }
+
+
+
+        var newInput = document.createElement("input");
+        var newLabel = document.createElement("label");
+        var newDiv = document.createElement("div");
+        newInput.className = "form-check-input";
+        newInput.type = "checkbox";
+        newInput.value = newPort;
+        newInput.checked = true;
+        newLabel.className = "form-check-label";
+        newLabel.innerHTML = newPort;
+        newDiv.className = "form-check";
+        
+        
+        if (portType === "tcp") {
+            var tcpCard = $("#TCPPorts")
+            newLabel.htmlFor = "tcpPort" + newPort;
+            newInput.name = "tcpPort";
+            newInput.id = "tcpPort" + newPort;
+            newDiv.appendChild(newInput);
+            newDiv.appendChild(newLabel);
+            tcpCard.append(newDiv);
+        }
+        else if (portType === "udp") {
+            var udpCard = $("#UDPPorts")
+            newLabel.htmlFor = "udpPort" + newPort;
+            newInput.name = "udpPort";
+            newInput.id = "udpPort" + newPort;
+            udpCard.append(newDiv);
+            newDiv.appendChild(newInput);
+            newDiv.appendChild(newLabel);
+        }
+
+        document.getElementById("newPort").value = "";
+      });
+    </script>
 </body>
 </html>
