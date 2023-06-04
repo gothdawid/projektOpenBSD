@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const { execSync } = require("child_process");
+const fs = require("fs");
 
 router.get("/", (req, res) => {
   const networkInterfaces = processNetworks();
-  console.log(networkInterfaces);
-  res.render("network", { networkInterfaces });
+  const dhcpClients = getDHCPClients();
+  //console.log(networkInterfaces);
+  res.render("network", { networkInterfaces, dhcpClients });
 });
 
 function processNetworks() {
@@ -148,6 +150,29 @@ bridge0: flags=41<UP,RUNNING> mtu 1500
     }
   });
   return networkInterfaces;
+}
+
+function getDHCPClients() {
+  const leasesFile = "/var/db/dhcpd.leases";
+  const leasesData = fs.readFileSync(leasesFile, "utf8");
+  const leases = leasesData.split("lease ").slice(1);
+
+  const dhcpClients = leases.map((lease) => {
+    const lines = lease.split("\n").filter((line) => line.trim() !== "");
+    const ipAddress = lines[0].trim().split(" ")[0];
+    const macAddress = lines.find((line) => line.includes("hardware ethernet"))
+      .split(" ")[2];
+    const hostnameLine = lines.find((line) =>
+      line.includes("client-hostname")
+    );
+    const hostname = hostnameLine
+      ? hostnameLine.split(" ")[1].replace(/"/g, "")
+      : "";
+
+    return { ipAddress, macAddress, hostname };
+  });
+
+  return dhcpClients;
 }
 
 module.exports = router;
