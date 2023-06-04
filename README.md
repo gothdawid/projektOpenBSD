@@ -242,7 +242,6 @@ For example `npm install express`
 - [x] phpmyadmin
 - [x] nano, htop, mc
 - [ ] FTP/SFTP
-- [ ] ~~SAMBA~~
+- [ ] SAMBA + drivers
 - [ ] ~~VPN/proxy IPsec OpenVPN~~
 - [ ] ~~AdAway~~
-
