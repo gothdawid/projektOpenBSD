@@ -28,6 +28,8 @@ app.use(
   express.static(path.join(__dirname, "node_modules/socket.io/client-dist"))
 );
 
+app.use("/img", express.static("img"));
+
 app.use(
   session({
     secret: "secret-key",
