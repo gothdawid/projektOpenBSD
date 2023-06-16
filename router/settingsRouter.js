@@ -4,21 +4,24 @@ const { execSync } = require("child_process");
 
 // Obsługa żądania GET na stronę ustawień
 router.get("/", (req, res) => {
-  const hostname = execSync("hostname").toString().trim();
-  const networkAddress = execSync(
-    'ifconfig | grep "em0" -A 7 | grep "inet " | awk \'{print $2}\''
-  )
-    .toString()
-    .trim();
+  const hostname = getHostname(req);
+  const lanAddress = getLanAddress(req);
+  const dhcpEnabled = getServiceStatus("dhcpd");
+  const dnsEnabled = getServiceStatus("unbound");
+  const sambaEnabled = getServiceStatus("smbd");
+  const mysqlEnabled = getServiceStatus("mysqld");
+  const nginxEnabled = getServiceStatus("nginx");
+  const sshEnabled = getServiceStatus("sshd");
 
   res.render("settings", {
     hostname: hostname || "",
-    lanAddress: networkAddress || "",
-    wanMode: req.session.wanMode || "",
-    staticWanAddress: req.session.staticWanAddress || "",
-    dnsServers: req.session.dnsServers || "",
-    dhcpEnabled: req.session.dhcpEnabled || false,
-    dnsEnabled: req.session.dnsEnabled || false,
+    lanAddress: lanAddress || "",
+    dhcpEnabled: dhcpEnabled || false,
+    dnsEnabled: dnsEnabled || false,
+    sambaEnabled: sambaEnabled || false,
+    mysqlEnabled: mysqlEnabled || false,
+    nginxEnabled: nginxEnabled || false,
+    sshEnabled: sshEnabled || false,
   });
 });
 
@@ -27,23 +30,70 @@ router.post("/", (req, res) => {
   const {
     hostname,
     lanAddress,
-    wanMode,
-    staticWanAddress,
-    dnsServers,
     dhcpEnabled,
     dnsEnabled,
+    sambaEnabled,
+    mysqlEnabled,
+    nginxEnabled,
+    sshEnabled,
   } = req.body;
 
-  // Zapisz wartości ustawień w sesji
-  req.session.hostname = hostname;
-  req.session.lanAddress = lanAddress;
-  req.session.wanMode = wanMode;
-  req.session.staticWanAddress = staticWanAddress;
-  req.session.dnsServers = dnsServers;
-  req.session.dhcpEnabled = !!dhcpEnabled;
-  req.session.dnsEnabled = !!dnsEnabled;
+  // Ustaw wartości ustawień
+  setHostname(req, hostname);
+  setLanAddress(req, lanAddress);
+  setServiceStatus("dhcpd", dhcpEnabled);
+  setServiceStatus("unbound", dnsEnabled);
+  setServiceStatus("smbd", sambaEnabled);
+  setServiceStatus("mysqld", mysqlEnabled);
+  setServiceStatus("nginx", nginxEnabled);
+  setServiceStatus("sshd", sshEnabled);
 
   res.redirect("/settings");
 });
+
+// Funkcje get i set dla poszczególnych zmiennych
+function getHostname(req) {
+  const hostname = execSync("hostname").toString().trim();
+  return hostname;
+}
+
+function setHostname(req, hostname) {
+  req.session.hostname = hostname;
+}
+
+function getLanAddress(req) {
+  const networkAddress = execSync(
+    'ifconfig | grep "vether0" -A 7 | grep "inet " | awk \'{print $2}\''
+  )
+    .toString()
+    .trim();
+  return networkAddress;
+}
+
+function setLanAddress(req, lanAddress) {
+  req.session.lanAddress = lanAddress;
+  const broadcastAddress = `${lanAddress.split(".")[0]}.${
+    lanAddress.split(".")[1]
+  }.${lanAddress.split(".")[2]}.255`;
+  const fileContent = `inet ${lanAddress} 255.255.255.0 ${broadcastAddress}\nup`;
+  execSync(`echo "${fileContent}" | tee /etc/hostname.vether0`);
+  execSync(`sh /etc/netstart`);
+}
+
+function getServiceStatus(serviceName) {
+  const output = execSync(`rcctl ls on`).toString();
+  const services = output.split("\n");
+  return services.includes(serviceName);
+}
+
+function setServiceStatus(serviceName, isEnabled) {
+  if (isEnabled) {
+    execSync(`rcctl enable ${serviceName}`);
+    execSync(`rcctl start ${serviceName}`);
+  } else {
+    execSync(`rcctl disable ${serviceName}`);
+    execSync(`rcctl stop ${serviceName}`);
+  }
+}
 
 module.exports = router;
