@@ -289,6 +289,10 @@ echo "/etc/rc.d/samba start" >> /etc/rc.local
 
 # Web GUI
 
+## Login
+
+![Login](img/login.png)
+
 ## Info
 
 ![Info](img/info.png)
@@ -305,6 +309,10 @@ echo "/etc/rc.d/samba start" >> /etc/rc.local
 
 ![Firewall](img/firewall.png)
 
+## Settings
+
+![Settings](img/settings.png)
+
 # TODO
 
 - [x] DNS
@@ -319,3 +327,4 @@ echo "/etc/rc.d/samba start" >> /etc/rc.local
 - [x] phpmyadmin
 - [x] nano, htop, mc
 - [x] SAMBA
+- [x] Auto install - script
